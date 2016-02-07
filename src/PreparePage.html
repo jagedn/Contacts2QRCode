@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+  <?!= include('Stylesheet_css') ?>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+</script>
+
+</head>
+ <body>
+
+<div class="block" id="loading">
+     <div id="fountainTextG">
+        <div id="fountainTextG_1" class="fountainTextG">></div>
+        <div id="fountainTextG_2" class="fountainTextG"> </div>
+        <div id="fountainTextG_3" class="fountainTextG">></div>
+        <div id="fountainTextG_4" class="fountainTextG">></div>
+        <div id="fountainTextG_5" class="fountainTextG"> </div>
+        <div id="fountainTextG_6" class="fountainTextG">></div>
+        <div id="fountainTextG_7" class="fountainTextG">></div>
+        <div id="fountainTextG_8" class="fountainTextG">></div>
+        <div id="fountainTextG_9" class="fountainTextG"> </div>
+        <div id="fountainTextG_10" class="fountainTextG">></div>
+        <div id="fountainTextG_11" class="fountainTextG">></div>
+        <div id="fountainTextG_12" class="fountainTextG">></div>
+        <div id="fountainTextG_13" class="fountainTextG">></div>
+        <div id="fountainTextG_14" class="fountainTextG"> </div>
+        <div id="fountainTextG_15" class="fountainTextG">></div>
+        <div id="fountainTextG_16" class="fountainTextG">></div>
+        <div id="fountainTextG_17" class="fountainTextG">></div>
+        <div id="fountainTextG_18" class="fountainTextG">></div>
+        <div id="fountainTextG_19" class="fountainTextG">></div>
+    </div>
+</div>
+
+<div class="sidebar">
+
+<? if( currentStage == 1 ) { ?>
+<div id="step1" class="block">
+<h1><?!= LanguageApp.translate('Selecciona un grupo','',Session.getActiveUserLocale()) ?></h1>
+<p><b><?!= LanguageApp.translate(
+'Atención!! Los datos de la hoja actual se perderán. Utiliza una hoja en blanco si no quieres perderlos.'
+,'',Session.getActiveUserLocale()) ?></b>
+</p>
+</div>
+
+<div class="block">
+<select id="listGroups"></select>
+</div>
+
+<div class="block">
+<button class="action" id="btnprepare"><?!= LanguageApp.translate('Preparar','',Session.getActiveUserLocale()) ?></button>
+</div>
+<? } ?>
+
+<? if( currentStage == 2 ) { ?>
+<div id="step2" class="block">
+<h1><?!= LanguageApp.translate('Revisa los campos','',Session.getActiveUserLocale()) ?></h1>
+<p><?!= LanguageApp.translate(
+'Revisa los campos que se han extraido de tus contactos. Puedes editarlos y cambiarlos a tu conveniencia.'
+,'',Session.getActiveUserLocale()) ?>
+</p>
+<p><?!= LanguageApp.translate(
+'Rellena aquellos campos que estén vacíos si quieres que se incluyan en la tarjeta.'
+,'',Session.getActiveUserLocale()) ?>
+</p>
+</div>
+
+<div class="block">
+    <button class="action" id="btnchangeId"><?!= LanguageApp.translate('Usar nombre como identificador','',Session.getActiveUserLocale()) ?></button>    
+</div>
+
+<div class="block">
+    <?!= LanguageApp.translate('Dirección:','',Session.getActiveUserLocale()) ?>
+    <input type="text" id="textaddr"/>
+    <button id="btnchangeaddr"><?!= LanguageApp.translate('Cambiar todos','',Session.getActiveUserLocale()) ?></button>
+</div>
+
+<div class="block">
+    <?!= LanguageApp.translate('Organizacion:','',Session.getActiveUserLocale()) ?>
+    <input type="text" id="textorg"/>
+    <button id="btnchangeorg"><?!= LanguageApp.translate('Cambiar todos','',Session.getActiveUserLocale()) ?></button>
+</div>
+
+<div class="block">
+    <?!= LanguageApp.translate('URL:','',Session.getActiveUserLocale()) ?>
+    <input type="text" id="texturl"/>
+    <button id="btnchangeurl"><?!= LanguageApp.translate('Cambiar todos','',Session.getActiveUserLocale()) ?></button>
+</div>
+
+<div class="block">
+    <button class="action" id="btnreviewed"><?!= LanguageApp.translate('Generar','',Session.getActiveUserLocale()) ?></button>
+    <button id="btnselect"><?!= LanguageApp.translate('Back','',Session.getActiveUserLocale()) ?></button>
+</div>
+
+
+
+<? } ?>
+
+<? if( currentStage == 3) { ?>
+<div id="step3" class="block">
+<p><?!= LanguageApp.translate(
+'Estamos generando los enlances, espera un momento','',Session.getActiveUserLocale()) ?>
+<br/>
+<p><span id="indexRow">&nbsp;</span> / <span id="totalRows">&nbsp;</span></p>
+</p>
+<? } ?>
+
+<? if( currentStage == 4 ) { ?>
+<div id="step4" class="block">
+<h1><?!= LanguageApp.translate('Guardar en Drive','',Session.getActiveUserLocale()) ?></h1>
+<p><?!= LanguageApp.translate(
+'Guarda automáticamente las imagenes en una carpeta de Drive. Desde ella podrás bajartelas o compartirlas como cualquier elemento de tu Drive.'
+,'',Session.getActiveUserLocale()) ?>
+</p>
+</div>
+
+<div class="block">
+    <button class="action" id="btnsave"><?!= LanguageApp.translate('Guardar','',Session.getActiveUserLocale()) ?></button>    
+    <button id="btnreview"><?!= LanguageApp.translate('Back','',Session.getActiveUserLocale()) ?></button>
+</div>
+<? } ?>
+
+<? if( currentStage == 5 ) { ?>
+<div id="step5" class="block">
+<p><?!= LanguageApp.translate('Generando las imagenes. Por favor, espera','',Session.getActiveUserLocale()) ?></p>
+</div>
+<div class="block">
+<div class="meter orange nostripes">
+	<span id="progressbar" style="width: 0%"></span>
+</div>
+</div>
+
+<? } ?>
+
+<? if( currentStage == 6 ) { ?>
+<div id="step6" class="block">
+<h1><?!= LanguageApp.translate('Tu carpeta','',Session.getActiveUserLocale()) ?></h1>
+<p><?!= LanguageApp.translate('Se ha creado una carpeta en Drive con las imágenes QR generadas.','',Session.getActiveUserLocale()) ?></p>
+</div>
+
+<div class="block">
+<button class="action" id="btndrive"><?!= LanguageApp.translate('Abrir','',Session.getActiveUserLocale()) ?></button>
+</div>
+<? } ?>
+
+</div>
+
+<script>
+   var currentStage = <?=currentStage ?>;
+   var contactsGroup = '<?= contactsGroup ?>';
+   var folderURL = '<?= folderURL ?>';
+   var folderName = '<?= folderName ?>';
+   var totalRows = <?= totalRows ?>;
+  </script>
+<?!= include('Client_js') ?>  
+ </body>
+ </html>

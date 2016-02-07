@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">
+  <?!= include('Stylesheet_css') ?>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>  
+</head>
+  <body>  
+  
+  <div id="waiting">
+  <h1><?!= LanguageApp.translate('Espere un momento, se están generando las imágenes en :','',Session.getActiveUserLocale()) ?></h1>
+  <h1><?!= folderName ?></h1>
+  </div>
+  
+  <div id="step5" style="display:none">
+   <h1><?!= LanguageApp.translate('5.- Tu carpeta','',Session.getActiveUserLocale()) ?></h1>
+   <div><?!= LanguageApp.translate('Se ha creado una carpeta en tu Drive con las imágenes QR generadas.','',Session.getActiveUserLocale()) ?></div>
+   <br/>
+   <a href="<?!= folderURL ?>"><?!= LanguageApp.translate('Abrir carpeta','',Session.getActiveUserLocale()) ?></a>
+  </div>
+
+  <script>
+   
+  $(document).ready(function(){  
+  
+    function succesHandler(){
+      $("#waiting").hide();
+      $("#step5").show();
+    }
+  
+    google.script.run
+      .withSuccessHandler(succesHandler)
+      .saveQRAsync('<?= contactsGroup ?>')
+  });
+  
+  
+  </script>
+  
+  </body>
+</html>
+
+
+

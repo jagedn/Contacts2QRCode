@@ -1,0 +1,131 @@
+<script>
+   var group = '';
+   function showMsg(msg){
+       console.log(msg)
+   }
+      
+   function closeSidebar(){
+       $('#loading').show();
+       $('.sidebar').hide();
+   }
+
+   function retrieveGroups(){
+       google.script.run.withSuccessHandler(onRetrieveGroupsSuccess).listGroups();
+   }   
+
+   function onRetrieveGroupsSuccess(grupos) {
+      console.log(grupos);
+      var list = $('#listGroups');
+      list.empty();
+      for (var i in grupos) {
+         list.append('<option>'+grupos[i].name+'</option>');
+      }
+      showMsg('');      
+   }
+
+   function onGroupSelected( group ){
+      showMsg(group);
+      google.script.run.populateWithGroup(group);   
+      closeSidebar();
+   }
+         
+   
+   function generateQRCodes(group){   
+       closeSidebar();
+       google.script.run.populateQRLinks(group);          
+   }
+
+   function saveQRCodes(group){       
+       closeSidebar();
+       google.script.run.saveQRLinks(group);   
+   }
+   
+   var index;
+   function waitForComplete(group, totalRows){
+      index=1;
+      //$('#indexRow').text(index);
+      //$('#totalRows').text(totalRows);      
+      google.script.run.withSuccessHandler(onRowDumped).dumpRow(group, index);
+   }
+
+   function onRowDumped(group){
+      index++;
+      if( index <= totalRows ){
+          //$('#indexRow').text( ((index/totalRows)*100)+'%'  );
+          $('#progressbar').width( ((index/totalRows)*100)+'%' );
+          google.script.run.withSuccessHandler(onRowDumped).dumpRow(group,index);
+      }else{
+          closeSidebar();
+          google.script.run.showFolder(group);
+      }
+   }
+   
+   
+  $(document).ready(function(){  
+  
+    //$('#loading').hide();
+  
+    $('#btnselect').on('click',function(){
+        google.script.run.menuItemPrepararHoja();   
+        closeSidebar();
+    });
+  
+    $('#btnreview').on('click',function(){
+        onGroupSelected(contactsGroup);
+    });
+    
+    $('#btndrive').on('click',function(){
+        window.open(folderURL,"_blank");
+    });
+    
+    $('#btnprepare').on('click',function(){
+      if($('#listGroups').val() != ''){
+        console.log('generando para '+$('#listGroups').val())
+        onGroupSelected($('#listGroups').val())
+      }
+    })
+    
+    $('#btnreviewed').on('click',function(){
+        generateQRCodes(contactsGroup);
+    });
+    
+    $('#btnsave').on('click',function(){
+        saveQRCodes(contactsGroup);
+    });
+    
+    $('#btnchangeId').on('click',function(){
+       $('#loading').show();
+       google.script.run.withSuccessHandler(function(){
+          $('#loading').hide();
+       }).replaceIdWithName()
+    });
+    
+    $('#btnchangeorg').on('click',function(){
+       $('#loading').show();
+       google.script.run.withSuccessHandler(function(){
+          $('#loading').hide();
+       }).replaceOrgWith($('#textorg').val())
+    });
+
+    $('#btnchangeaddr').on('click',function(){
+       $('#loading').show();
+       google.script.run.withSuccessHandler(function(){
+          $('#loading').hide();
+       }).replaceAddrWith($('#textaddr').val())
+    });
+
+    $('#btnchangeurl').on('click',function(){
+       $('#loading').show();
+       google.script.run.withSuccessHandler(function(){
+          $('#loading').hide();
+       }).replaceUrlWith($('#texturl').val())
+    });
+
+    if( currentStage  == '1'){
+          retrieveGroups();
+    }
+    if( currentStage  == '5'){
+          waitForComplete(contactsGroup,totalRows);
+    }  
+  });    
+</script>
